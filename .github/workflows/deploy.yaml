@@ -1,0 +1,54 @@
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build-backend:
+    name: Build Backend
+    runs-on: ubuntu-lastest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      REGISTRY: ghcr.io/${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build Image And Push
+        run: |
+          docker compose -f compose.build.yml --profile backend build
+          docker compose -f compose.build.yml --profile backend push 
+
+  deploy:
+    name: Deploy
+    runs-on: self-hosted
+    nedds: [build-backend]
+    permissions:
+      contents: read
+      packages: write
+    env:
+      REGISTRY: ghcr.io/${{ github.repository }}
+      DATABASE_DB: ${{ secrets.DATABASE_DB }}
+      DATABASE_USER: ${{ secrets.DATABASE_USER }}
+      DATABASE_PASS: ${{ secrets.DATABASE_PASS }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Clean Container, Image And Prepare For Deploy
+        run: docker compose -f compose.yaml -p todo-backend --profile deploy down --rmi all -v
+      - name: Deploy Application
+        run: docker compose -f compose.yaml -p todo-backend --profile deploy up -d

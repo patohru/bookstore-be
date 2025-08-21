@@ -1,0 +1,15 @@
+on:
+  pull_request:
+  workflow_dispath:
+
+jobs:
+  format:
+    runs-on: ubuntu-lastest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v4
+
+      - name: Check Format
+        run: diff -u <(echo -n) <(gofmt -d ./)
