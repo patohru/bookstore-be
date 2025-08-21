@@ -6,7 +6,7 @@ on:
 jobs:
   build-backend:
     name: Build Backend
-    runs-on: ubuntu-lastest
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
