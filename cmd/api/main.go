@@ -9,8 +9,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/go-fuego/fuego"
 	"bookstore-be/internal/server"
+	"github.com/go-fuego/fuego"
 )
 
 func gracefulShutdown(apiServer *fuego.Server, done chan bool) {
