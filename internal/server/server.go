@@ -10,6 +10,7 @@ import (
 
 	"bookstore-be/internal/config"
 	"bookstore-be/internal/controllers/ping"
+	middleware "bookstore-be/internal/server/middlewares"
 )
 
 type Server struct {
@@ -21,6 +22,7 @@ func NewServer() *fuego.Server {
 
 	s := fuego.NewServer(
 		fuego.WithAddr(fmt.Sprintf(":%d", cfg.Port)),
+		fuego.WithGlobalMiddlewares(middleware.Cors),
 		fuego.WithEngineOptions(
 			fuego.WithOpenAPIConfig(fuego.OpenAPIConfig{
 				DisableDefaultServer: true,
