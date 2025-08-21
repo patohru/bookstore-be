@@ -10,8 +10,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    env:
-      REGISTRY: ghcr.io/${{ env.REPO }}:latest
     steps:
       - uses: actions/checkout@v4
       - name: Setup Docker Buildx
@@ -28,7 +26,8 @@ jobs:
         run: |
           docker compose -f compose.build.yml --profile backend build
           docker compose -f compose.build.yml --profile backend push 
-
+    env:
+      REGISTRY: ghcr.io/${{ env.REPO }}:latest
   deploy:
     name: Deploy
     runs-on: self-hosted
