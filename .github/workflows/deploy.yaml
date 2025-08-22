@@ -48,6 +48,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Clean Container, Image And Prepare For Deploy
-        run: docker compose -f compose.yaml -p todo-backend --profile deploy down --rmi all -v
+        run: docker compose -f compose.yml -p todo-backend --profile deploy down --rmi all -v
       - name: Deploy Application
-        run: docker compose -f compose.yaml -p todo-backend --profile deploy up -d
+        run: docker compose -f compose.yml -p todo-backend --profile deploy up -d
