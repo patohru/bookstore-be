@@ -1,47 +1,51 @@
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: prod
-    restart: unless-stopped
-    ports:
-      - ${PORT}:${PORT}
-    environment:
-      APP_ENV: ${APP_ENV}
-      PORT: ${PORT}
-      BLUEPRINT_DB_HOST: ${BLUEPRINT_DB_HOST}
-      BLUEPRINT_DB_PORT: ${BLUEPRINT_DB_PORT}
-      BLUEPRINT_DB_DATABASE: ${BLUEPRINT_DB_DATABASE}
-      BLUEPRINT_DB_USERNAME: ${BLUEPRINT_DB_USERNAME}
-      BLUEPRINT_DB_PASSWORD: ${BLUEPRINT_DB_PASSWORD}
-      BLUEPRINT_DB_SCHEMA: ${BLUEPRINT_DB_SCHEMA}
-    depends_on:
-      psql_bp:
-        condition: service_healthy
-    networks:
-      - blueprint
-  psql_bp:
+  database:
+    container_name: todo-database
     image: postgres:latest
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${BLUEPRINT_DB_DATABASE}
-      POSTGRES_USER: ${BLUEPRINT_DB_USERNAME}
-      POSTGRES_PASSWORD: ${BLUEPRINT_DB_PASSWORD}
-    ports:
-      - "${BLUEPRINT_DB_PORT}:5432"
+      POSTGRES_DB: ${DATABASE_DB}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASS}
     volumes:
-      - psql_volume_bp:/var/lib/postgresql/data
+      - database:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${BLUEPRINT_DB_USERNAME} -d ${BLUEPRINT_DB_DATABASE}'"]
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${DATABASE_USER} -d ${DATABASE_DB}'"]
       interval: 5s
       timeout: 5s
       retries: 3
       start_period: 15s
     networks:
-      - blueprint
+      - network
+    profiles:
+      - backend
+      - deploy
+
+  backend:
+    container_name: bookstore-backend
+    image: ${REGISTRY}/backend:lastest
+    restart: unless-stopped
+    ports:
+      - ${PORT}:${PORT}
+    environment:
+      DATABASE_DB: ${DATABASE_DB}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASS: ${DATABASE_PASS}
+      DATABASE_HOST: database
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - network
+    profiles:
+      - backend
+      - deploy
 
 volumes:
-  psql_volume_bp:
+  database:
+    name: bookstore-database
+    external: true
 networks:
-  blueprint:
+  network:
+    name: bookstore-network
+    external: true
