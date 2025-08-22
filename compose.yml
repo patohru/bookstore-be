@@ -26,7 +26,7 @@ services:
     image: ${REGISTRY}/backend:lastest
     restart: unless-stopped
     ports:
-      - ${PORT}:${PORT}
+      - 8000:8000
     environment:
       DATABASE_DB: ${DATABASE_DB}
       DATABASE_USER: ${DATABASE_USER}
