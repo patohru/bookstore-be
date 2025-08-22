@@ -38,7 +38,7 @@ jobs:
       DATABASE_DB: ${{ secrets.DATABASE_DB }}
       DATABASE_USER: ${{ secrets.DATABASE_USER }}
       DATABASE_PASS: ${{ secrets.DATABASE_PASS }}
-      PORT: ${ secrets.PORT }
+      PORT: ${{ secrets.PORT }}
     steps:
       - uses: actions/checkout@v4
 
