@@ -4,9 +4,9 @@ services:
     image: arm64v8/postgres:latest
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${DATABASE_DB}
-      POSTGRES_USER: ${DATABASE_USER}
-      POSTGRES_PASSWORD: ${DATABASE_PASS}
+      DATABASE_DB: ${DATABASE_DB}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASS: ${DATABASE_PASS}
     volumes:
       - database:/var/lib/postgresql/data
     healthcheck:
