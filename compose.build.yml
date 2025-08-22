@@ -1,6 +1,7 @@
 services:
   backend:
     image: ${REGISTRY}/backend:latest
+    platform: linux/arm64/v8
     build:
       context: .
       dockerfile: Dockerfile
