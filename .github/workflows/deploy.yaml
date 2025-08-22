@@ -34,7 +34,7 @@ jobs:
       contents: read
       packages: write
     env:
-      REGISTRY: ghcr.io/${{ github.repository }}:latest
+      REGISTRY: ghcr.io/${{ github.repository }}
       DATABASE_DB: ${{ secrets.DATABASE_DB }}
       DATABASE_USER: ${{ secrets.DATABASE_USER }}
       DATABASE_PASS: ${{ secrets.DATABASE_PASS }}
@@ -49,6 +49,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Clean Container, Image And Prepare For Deploy
-        run: docker compose -f compose.yml -p todo-backend --profile deploy down --rmi all -v
+        run: docker compose -f compose.yml -p bookstore-be --profile deploy down --rmi all -v
       - name: Deploy Application
-        run: docker compose -f compose.yml -p todo-backend --profile deploy up -d
+        run: docker compose -f compose.yml -p bookstore-be --profile deploy up -d
