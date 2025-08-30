@@ -7,11 +7,14 @@ build:
 	@echo "Building..."
 	
 	
-	@go build -o main cmd/api/main.go
+	@docker compose -f compose.build.yml --profile backend build
 
+# Delete docker iamge
+delete:
+	@docker compose -f compose.yml -p bookstore-be --profile deploy down --rmi all -v
 # Run the application
 run:
-	@go run cmd/api/main.go
+	@docker compose --env-file .env -f compose.yml -p bookstore-be --profile deploy up -d
 # Create DB container
 docker-run:
 	@if docker compose up --build 2>/dev/null; then \
