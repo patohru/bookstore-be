@@ -1,12 +1,14 @@
 services:
   database:
     container_name: bookstore-database
-    image: arm64v8/postgres:latest
+    image: postgres:latest
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${DATABASE_DB}
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASS}
+    ports:
+      - 5432:5432
     volumes:
       - database:/var/lib/postgresql/data
     healthcheck:
@@ -26,12 +28,16 @@ services:
     image: ${REGISTRY}/backend:latest
     restart: unless-stopped
     ports:
-      - 8000:8000
+      - ${PORT}:${PORT}
     environment:
       DATABASE_DB: ${DATABASE_DB}
       DATABASE_USER: ${DATABASE_USER}
       DATABASE_PASS: ${DATABASE_PASS}
-      DATABASE_HOST: database
+      DATABASE_HOST: ${DATABASE_HOST}
+      CLIENT_ID: ${CLIENT_ID}
+      CLIENT_SECRET: ${CLIENT_SECRET}
+      CLIENT_CALLBACK_URL: ${CLIENT_CALLBACK_URL}
+      PORT: ${PORT}
     depends_on:
       database:
         condition: service_healthy
