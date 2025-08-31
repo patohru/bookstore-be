@@ -13,5 +13,5 @@ func PingHandler(c fuego.ContextNoBody) (*PingResponse, error) {
 }
 
 func RegisterRoutes(f *fuego.Server) {
-	fuego.Get(f, "/", PingHandler)
+	fuego.Get(f, "/ping", PingHandler)
 }

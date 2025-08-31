@@ -12,9 +12,11 @@ require (
 	github.com/moznion/go-optional v0.13.0
 	github.com/vgarvardt/pgx-google-uuid/v5 v5.6.0
 	golang.org/x/crypto v0.41.0
+	golang.org/x/oauth2 v0.30.0
 )
 
 require (
+	cloud.google.com/go/compute/metadata v0.3.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.8 // indirect
 	github.com/getkin/kin-openapi v0.131.0 // indirect
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
