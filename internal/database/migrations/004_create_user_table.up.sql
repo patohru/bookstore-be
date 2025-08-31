@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users(
     first_name text NOT NULL,
     last_name text NOT NULL,
     dob date NOT NULL,
-    role role NOT NULL ,
+    role role NOT NULL DEFAULT 'member',
     created_at timestamptz NOT NULL DEFAULT now(),
     updated_at timestamptz NOT NULL DEFAULT now()
 );

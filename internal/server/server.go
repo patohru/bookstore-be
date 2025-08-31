@@ -9,6 +9,7 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 
 	"bookstore-be/internal/config"
+	"bookstore-be/internal/controllers/auth"
 	"bookstore-be/internal/controllers/ping"
 	middleware "bookstore-be/internal/server/middlewares"
 )
@@ -30,7 +31,8 @@ func NewServer() *fuego.Server {
 			}),
 		),
 	)
-
+	
+	auth.RegisterRoutes(s)
 	ping.RegisterRoutes(s)
 
 	return s
