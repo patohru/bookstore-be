@@ -11,26 +11,24 @@ import (
 
 type OAuthService struct {
     GoogleLoginConfig oauth2.Config
-	cfg config.OauthConfig
 }
 
 func New() *OAuthService {
-	cfg, _ := env.ParseAs[config.OauthConfig]()
-	
 	var AppConfig oauth2.Config
-	return &OAuthService{AppConfig, cfg}
+	return &OAuthService{AppConfig}
 }
 
 func (s *OAuthService) GoogleConfig() oauth2.Config {
+	cfg, _ := env.ParseAs[config.OauthConfig]()
 	s.GoogleLoginConfig = oauth2.Config{
-		RedirectURL: s.cfg.CLIENT_CALLBACK_URL,
-		ClientID: s.cfg.CLIENT_ID,
-		ClientSecret: s.cfg.CLIENT_SECRET,
+		RedirectURL: cfg.CLIENT_CALLBACK_URL,
+		ClientID: cfg.CLIENT_ID,
+		ClientSecret: cfg.CLIENT_SECRET,
 		Scopes: []string{
 			"https://www.googleapis.com/auth/userinfo.email",
 			"https://www.googleapis.com/auth/userinfo.profile",
 		},
-        Endpoint: google.Endpoint,
+		Endpoint: google.Endpoint,
 	}
 
 	return s.GoogleLoginConfig
