@@ -3,12 +3,19 @@
 # Build the application
 all: build test
 
-build:
+docker-build:
 	@echo "Building..."
 	
 	
 	@docker compose -f compose.build.yml --profile backend build
 
+
+build:
+
+	@echo "Building..."
+	
+	
+	@go build -o main cmd/api/main.go
 # Delete docker iamge
 delete:
 	@docker compose -f compose.yml -p bookstore-be --profile deploy down --rmi all -v
